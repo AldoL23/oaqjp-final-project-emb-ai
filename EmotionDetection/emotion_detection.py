@@ -31,5 +31,4 @@ def emotion_detector(text_to_analyze):
         'dominant_score': dominant_emotion[1]
         }
         
-    #Nota: Este codio ya paso la prueba en el network labs.
-
+    

@@ -7,20 +7,31 @@ def emotion_detector(text_to_analyze):
     header = {"grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"}
     response = requests.post(url, json = myobj, headers=header)
     formatted_response= json.loads(response.text)
-    emotions = formatted_response['emotionPredictions'][0]['emotion']
-    anger= emotions['anger']
-    disgust= emotions['disgust']
-    fear= emotions['fear']
-    joy= emotions['joy']
-    sadness= emotions['sadness']
-    emotion_scores = {
+    
+    if response.status_code == 200:
+        emotions = formatted_response['emotionPredictions'][0]['emotion']
+        anger= emotions['anger']
+        disgust= emotions['disgust']
+        fear= emotions['fear']
+        joy= emotions['joy']
+        sadness= emotions['sadness']
+        emotion_scores = {
         'anger': anger,
         'disgust': disgust,
         'fear': fear,
         'joy': joy,
         'sadness': sadness
         }
-    dominant_emotion = max(emotions.items(), key=lambda x: x[1])
+        dominant_emotion = max(emotion_scores.items(), key=lambda x: x[1])
+    elif response.status_code == 400:
+        anger= None
+        disgust = None
+        fear = None
+        joy = None
+        sadness = None
+        dominant_emotion = None
+        dominant_score = None
+
     return {
         'anger': anger,
         'disgust': disgust,
@@ -30,5 +41,5 @@ def emotion_detector(text_to_analyze):
         'dominant_emotion': dominant_emotion[0],
         'dominant_score': dominant_emotion[1]
         }
-        
-    
+
+
